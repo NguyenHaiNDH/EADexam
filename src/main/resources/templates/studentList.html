@@ -7,7 +7,7 @@
             font-family: Arial, sans-serif;
         }
         h1 {
-            background-color: #2F4F4F; /* Màu nền giống trong hình */
+            background-color: #2F4F4F;
             color: white;
             padding: 10px;
             text-align: left;
@@ -18,7 +18,7 @@
             text-align: left;
         }
         .button-container button {
-            background-color: #4CAF50; /* Màu xanh lá cây giống trong hình */
+            background-color: #4CAF50;
             color: white;
             padding: 8px 16px;
             border: none;
@@ -45,7 +45,10 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-
+        .edit-icon {
+            color: #1E90FF;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -69,11 +72,10 @@
         <th>Score 2</th>
         <th>Credit</th>
         <th>Grade</th>
-
+        <th></th>
     </tr>
     </thead>
     <tbody>
-    <!-- Lặp qua danh sách sinh viên và điểm -->
     <tr th:each="student, iterStat : ${students}">
         <td th:each="score : ${studentScores[student.studentId]}" th:text="${iterStat.count}"></td>
         <td th:each="score : ${studentScores[student.studentId]}" th:text="${student.studentCode}"></td>
@@ -83,12 +85,14 @@
         <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.score2}"></td>
         <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.subject.credit}"></td>
         <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.calculateGrade()}"></td>
-
+        <td th:each="score : ${studentScores[student.studentId]}">
+            <span class="edit-icon" th:onclick="'showEditForm(' + ${score.studentScoreId} + ',' + ${score.score1} + ',' + ${score.score2} + ')'">✏️</span>
+        </td>
     </tr>
     </tbody>
 </table>
 
-<!-- Form thêm sinh viên (ẩn mặc định) -->
+<!-- Form thêm sinh viên -->
 <div id="addStudentForm" style="display: none; margin-top: 20px;">
     <h2>Add Student</h2>
     <form action="/addStudent" method="post">
@@ -99,7 +103,7 @@
     </form>
 </div>
 
-<!-- Form thêm điểm (ẩn mặc định) -->
+<!-- Form thêm điểm -->
 <div id="addScoreForm" style="display: none; margin-top: 20px;">
     <h2>Add Score</h2>
     <form action="/addScore" method="post">
@@ -110,5 +114,25 @@
         <input type="submit" value="Add Score">
     </form>
 </div>
+
+<!-- Form chỉnh sửa điểm -->
+<div id="editScoreForm" style="display: none; margin-top: 20px;">
+    <h2>Edit Score</h2>
+    <form action="/editScore" method="post">
+        <input type="hidden" name="studentScoreId" id="editStudentScoreId">
+        Score 1: <input type="number" step="0.1" name="score1" id="editScore1" required><br><br>
+        Score 2: <input type="number" step="0.1" name="score2" id="editScore2" required><br><br>
+        <input type="submit" value="Update Score">
+    </form>
+</div>
+
+<script>
+    function showEditForm(studentScoreId, score1, score2) {
+        document.getElementById('editScoreForm').style.display = 'block';
+        document.getElementById('editStudentScoreId').value = studentScoreId;
+        document.getElementById('editScore1').value = score1;
+        document.getElementById('editScore2').value = score2;
+    }
+</script>
 </body>
 </html>

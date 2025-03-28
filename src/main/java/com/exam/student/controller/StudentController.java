@@ -44,4 +44,11 @@ public class StudentController {
         studentService.addScore(score);
         return "redirect:/";
     }
+
+    // sửa điểm
+    @PostMapping("/editScore")
+    public String editScore(@RequestParam Long studentScoreId, @RequestParam double score1, @RequestParam double score2) {
+        studentService.updateScore(studentScoreId, score1, score2);
+        return "redirect:/";
+    }
 }
