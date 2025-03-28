@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Information System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            background-color: #2F4F4F; /* Màu nền giống trong hình */
+            color: white;
+            padding: 10px;
+            text-align: left;
+            margin: 0;
+        }
+        .button-container {
+            margin: 10px 0;
+            text-align: left;
+        }
+        .button-container button {
+            background-color: #4CAF50; /* Màu xanh lá cây giống trong hình */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #2F4F4F; /* Màu nền tiêu đề giống trong hình */
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .edit-icon {
+            color: #1E90FF; /* Màu xanh của biểu tượng chỉnh sửa */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Student Information System</h1>
+
+<!-- Nút + Student và + Score -->
+<div class="button-container">
+    <button onclick="document.getElementById('addStudentForm').style.display='block'">+ Student</button>
+    <button onclick="document.getElementById('addScoreForm').style.display='block'">+ Score</button>
+</div>
+
+<!-- Bảng hiển thị thông tin -->
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>Subject Name</th>
+        <th>Score 1</th>
+        <th>Score 2</th>
+        <th>Credit</th>
+        <th>Grade</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Lặp qua danh sách sinh viên và điểm -->
+    <tr th:each="student, iterStat : ${students}">
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${iterStat.count}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${student.studentCode}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${student.fullName}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.subject.subjectName}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.score1}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.score2}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.subject.credit}"></td>
+        <td th:each="score : ${studentScores[student.studentId]}" th:text="${score.calculateGrade()}"></td>
+
+    </tr>
+    </tbody>
+</table>
+
+<!-- Form thêm sinh viên (ẩn mặc định) -->
+<div id="addStudentForm" style="display: none; margin-top: 20px;">
+    <h2>Add Student</h2>
+    <form action="/addStudent" method="post">
+        Student Code: <input type="text" name="studentCode" required><br><br>
+        Full Name: <input type="text" name="fullName" required><br><br>
+        Address: <input type="text" name="address"><br><br>
+        <input type="submit" value="Add Student">
+    </form>
+</div>
+
+<!-- Form thêm điểm (ẩn mặc định) -->
+<div id="addScoreForm" style="display: none; margin-top: 20px;">
+    <h2>Add Score</h2>
+    <form action="/addScore" method="post">
+        Student ID: <input type="number" name="studentId" required><br><br>
+        Subject ID: <input type="number" name="subjectId" required><br><br>
+        Score 1: <input type="number" step="0.1" name="score1" required><br><br>
+        Score 2: <input type="number" step="0.1" name="score2" required><br><br>
+        <input type="submit" value="Add Score">
+    </form>
+</div>
+</body>
+</html>
